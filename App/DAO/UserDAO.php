@@ -23,7 +23,9 @@ class UserDAO
             $sql = "SELECT * FROM $this->table ORDER BY id";
             $stmt = $this->connection->query($sql);
             $users = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
             $this->db->closeConnection();
+
             return $users;
         } catch (\Exception $e) {
             throw new \Exception("Error to get users: " . $e->getMessage());
@@ -36,8 +38,10 @@ class UserDAO
             $sql = "SELECT * FROM $this->table WHERE id = ?";
             $stmt = $this->connection->prepare($sql);
             $stmt->execute([$userId]);
-            $user = $stmt->fetch();
+            $user = $stmt->fetch(\PDO::FETCH_ASSOC);
+
             $this->db->closeConnection();
+            
             if ($user) {
                 $userData = [
                     "id" => $user["id"],
@@ -81,6 +85,7 @@ class UserDAO
             $sql = "UPDATE $this->table SET name = ?, email = ? WHERE id = ?";
             $stmt = $this->connection->prepare($sql);
             $stmt->execute([$user->getName(), $user->getEmail(), $user->getId()]);
+            
             $this->db->closeConnection();
 
             if ($stmt->rowCount() > 0) {
@@ -98,6 +103,7 @@ class UserDAO
     {
         try {
             $userToDelete = $this->getUserById($id);
+            
             if ($userToDelete) {
                 $sql = "DELETE FROM $this->table WHERE id = ?";
                 $stmt = $this->connection->prepare($sql);
