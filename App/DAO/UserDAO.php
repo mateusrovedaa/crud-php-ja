@@ -17,6 +17,42 @@ class UserDAO
         $this->connection = $this->db->getConnection();
     }
 
+    public function getAll()
+    {
+        try {
+            $sql = "SELECT * FROM $this->table ORDER BY id";
+            $stmt = $this->connection->query($sql);
+            $users = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+            $this->db->closeConnection();
+            return $users;
+        } catch (\Exception $e) {
+            throw new \Exception("Error to get users: " . $e->getMessage());
+        }
+    }
+
+    public function getUserById($userId)
+    {
+        try {
+            $sql = "SELECT * FROM $this->table WHERE id = ?";
+            $stmt = $this->connection->prepare($sql);
+            $stmt->execute([$userId]);
+            $user = $stmt->fetch();
+            $this->db->closeConnection();
+            if ($user) {
+                $userData = [
+                    "id" => $user["id"],
+                    "name" => $user["name"],
+                    "email" => $user["email"]
+                ];
+                return $userData;
+            } else {
+                return null;
+            }
+        } catch (\Exception $e) {
+            throw new \Exception("Error to insert user: " . $e->getMessage());
+        }
+    }
+
     public function create(User $user)
     {
         try {
@@ -28,9 +64,9 @@ class UserDAO
             $this->db->closeConnection();
 
             if ($stmt->rowCount() > 0) {
-                $userId = $this->connection->lastInsertId(); 
-                $userData = $this->getUserById($userId); 
-                return $userData; 
+                $userId = $this->connection->lastInsertId();
+                $userData = $this->getUserById($userId);
+                return $userData;
             } else {
                 return null;
             }
@@ -39,23 +75,38 @@ class UserDAO
         }
     }
 
-    public function getUserById($userId)
+    public function update(User $user)
     {
         try {
-            $sql = "SELECT * FROM $this->table WHERE id = ?";
+            $sql = "UPDATE $this->table SET name = ?, email = ? WHERE id = ?";
             $stmt = $this->connection->prepare($sql);
-            $stmt->execute([$userId]);
-            $user = $stmt->fetch();
+            $stmt->execute([$user->getName(), $user->getEmail(), $user->getId()]);
+            $this->db->closeConnection();
 
-            $userData = [
-                "id" => $user["id"],
-                "name" => $user["name"],
-                "email" => $user["email"]
-            ];
-
-            return $userData;
+            if ($stmt->rowCount() > 0) {
+                $userData = $this->getUserById($user->getId());
+                return $userData;
+            } else {
+                return null;
+            }
         } catch (\Exception $e) {
-            throw new \Exception("Error to insert user: " . $e->getMessage());
+            throw new \Exception("Error to update user: " . $e->getMessage());
+        }
+    }
+
+    public function delete($id)
+    {
+        try {
+            $userToDelete = $this->getUserById($id);
+            if ($userToDelete) {
+                $sql = "DELETE FROM $this->table WHERE id = ?";
+                $stmt = $this->connection->prepare($sql);
+                $stmt->execute([$id]);
+                $this->db->closeConnection();
+            } 
+            return $userToDelete;
+        } catch (\Exception $e) {
+            throw new \Exception("Error to delete user: " . $e->getMessage());
         }
     }
 }

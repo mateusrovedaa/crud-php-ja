@@ -8,10 +8,11 @@ class User
     private $name;
     private $email;
 
-    public function __construct($name, $email)
+    public function __construct($name, $email, $id = null)
     {
         $this->name = $name;
         $this->email = $email;
+        $this->id = $id;
     }
 
     public function getId()
