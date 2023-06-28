@@ -2,11 +2,17 @@
 
 use App\Controllers\UserController;
 
+// fix CORS OPTIONS problem
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    header("Access-Control-Allow-Origin: *");
+    header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+    exit();
+}
+
 $router->get('/users', function () {  
     $userController = new UserController();
     $usersData = $userController->index();
     
-    header('Content-Type: application/json');
     echo json_encode($usersData);
 });
 
@@ -14,8 +20,7 @@ $router->get('/users/{id}', function ($id) {
     $userController = new UserController();
     $userData = $userController->getOne($id);
     
-    header('Content-Type: application/json');
-    echo json_encode($userData);
+    echo $userData;
 });
 
 $router->post('/users', function () {
@@ -24,8 +29,7 @@ $router->post('/users', function () {
     $userController = new UserController();
     $userData = $userController->store($request);
 
-    header('Content-Type: application/json');
-    echo json_encode($userData);
+    echo $userData;
 });
 
 $router->put('/users/{id}', function ($id) {  
@@ -34,14 +38,12 @@ $router->put('/users/{id}', function ($id) {
     $userController = new UserController();
     $userData = $userController->update($request, $id);
 
-    header('Content-Type: application/json');
-    echo json_encode($userData);
+    echo $userData;
 });
 
 $router->delete('/users/{id}', function ($id) {  
     $userController = new UserController();
     $userData = $userController->delete($id);
 
-    header('Content-Type: application/json');
-    echo json_encode($userData);
+    echo json_decode($userData);
 });

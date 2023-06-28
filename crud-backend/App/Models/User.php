@@ -19,7 +19,7 @@ class User
     {
         return $this->id;
     }
- 
+
     public function setId($id)
     {
         $this->id = $id;
@@ -43,5 +43,14 @@ class User
     public function setEmail($email)
     {
         $this->email = $email;
+    }
+
+    public function __toString()
+    {
+        return json_encode([
+            'id' => $this->id,
+            'name' => $this->name,
+            'email' => $this->email
+        ]);
     }
 }

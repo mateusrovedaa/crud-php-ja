@@ -1,0 +1,17 @@
+{
+    "name": "crud-front",
+    "version": "1.0.0",
+    "description": "",
+    "main": "front.js",
+    "scripts": {
+      "serve": "nodemon --exec 'node front.js' -e js"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+      "express": "^4.18.2"
+    },
+    "devDependencies": {
+      "nodemon": "^2.0.19"
+    }
+  }

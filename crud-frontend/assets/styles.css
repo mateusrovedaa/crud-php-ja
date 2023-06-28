@@ -1,0 +1,35 @@
+.bg-mynav {
+    background-color: #49efa7;
+}
+
+body {
+    font-size: 1.25rem;
+    background-color: #f6f8fa;
+}
+
+td {
+    line-height: 3rem;
+}
+
+.nav-link--black {
+    color: #000;
+}
+
+.nav-pills .nav-link.active {
+    color: #fff;
+    background-color: #000;
+}
+
+.nav-link:focus,
+.nav-link:hover {
+    color: #fff;
+}
+
+.big-swal {
+    width: 700px !important;
+}
+
+.form-label {
+    margin-top: 20px;
+    margin-bottom: 0px;
+}

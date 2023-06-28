@@ -43,11 +43,7 @@ class UserDAO
             $this->db->closeConnection();
             
             if ($user) {
-                $userData = [
-                    "id" => $user["id"],
-                    "name" => $user["name"],
-                    "email" => $user["email"]
-                ];
+                $userData = new User($user["name"], $user["email"], $user["id"]);
                 return $userData;
             } else {
                 return null;
